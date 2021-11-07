@@ -1,0 +1,64 @@
+import numpy as np
+
+def calculate(list):
+    """
+    Input: List containing 9 elements. This is converted into a 3x3 
+    Numpy array.
+    Output: Mean, variance, standard deviation, max, min, 
+    and sum of the rows, columns, and elements in a 3 x 3 matrix; the
+    output is a dictionary, containing items that follow this format:
+        'mean': [axis1, axis2, flattened]
+    The descriptive statistics above will be calculated for each axis, 
+    as well as for the flattened matrix. Return values will be lists, not
+    numpy array.
+    
+    Conditions: 
+        If input list does not contain 9 elements, a 
+        ValueError will be raised.
+        
+    """
+    
+    if len(list) != 9:
+        raise ValueError("List must contain nine numbers.")
+    
+    mat = np.array(list).reshape((3,3))
+    calculations = {}
+    temp= []
+    
+    for i in range(2):
+        temp.append(np.mean(mat, axis = i).tolist())
+    temp.append(np.mean(mat).tolist())
+    calculations['mean'] = temp
+    temp = []
+
+    for i in range(2):
+        temp.append(np.var(mat, axis = i).tolist())
+    temp.append(np.var(mat).tolist())
+    calculations['variance'] = temp
+    temp = []
+    
+    for i in range(2):
+        temp.append(np.std(mat, axis = i).tolist())
+    temp.append(np.std(mat).tolist())
+    calculations['standard deviation'] = temp
+    temp = []    
+    
+    for i in range(2):
+        temp.append(np.max(mat, axis = i).tolist())
+    temp.append(np.max(mat).tolist())
+    calculations['max'] = temp
+    temp = []
+
+    for i in range(2):
+        temp.append(np.min(mat, axis = i).tolist())
+    temp.append(np.min(mat).tolist())
+    calculations['min'] = temp
+    temp = []
+    
+    for i in range(2):
+        temp.append(np.sum(mat, axis = i).tolist())
+    temp.append(np.sum(mat).tolist())
+    calculations['sum'] = temp
+    temp = []
+
+    return calculations
