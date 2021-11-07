@@ -1,0 +1,71 @@
+import numpy as np
+import pandas as pd
+
+
+# Read the data in
+df = pd.read_csv("adult.data.csv")
+df
+
+# How many people of each race are represented?
+df['race'].value_counts()
+
+# What is the average age of men in the df?
+round(df.loc[df['sex'] == 'Male'].age.mean(), 1)
+
+# What is the percentage of people who have a Bachelor's degree?
+round((len(df.loc[df['education'] == "Bachelors"])/len(df))*100, 1)
+
+# Percentage of people with Bachelors or higher who make more than 50k
+# Bachelors, Masters, Doctorate
+
+higher_education = df.loc[
+    (df['education'] == 'Bachelors') 
+    | (df['education'] == 'Masters') 
+    | (df['education'] == 'Doctorate')] 
+
+
+lower_education = df.loc[
+    (df['education'] != 'Bachelors') 
+    & (df['education'] != 'Masters') 
+    & (df['education'] != 'Doctorate')
+        ]   
+ 
+# With salary over 50K
+mask = df['salary'] == '>50K'
+higher_education_rich = round(len(higher_education[mask])/len(higher_education)*100, 1)
+
+lower_education_rich = round(len(lower_education[mask])/len(lower_education)*100, 1)
+
+# Minimum Number of Hours a Person works per week
+min_work_hours = df['hours-per-week'].min()
+min_work_hours
+
+min_mask = df['hours-per-week'] == min_work_hours
+
+# Salary Over 50K working min hours
+num_workers =len(df[min_mask & mask])
+
+rich_percentage = int(num_workers/(len(df[min_mask]))*100)
+rich_percentage
+
+# Country with highest number of people making >50K
+#highest_earning_country = 
+a = df[['native-country', 'salary']]
+b = a[a['salary'] == ">50K"]
+b = b.value_counts().reset_index().drop('salary', axis = 'columns').set_index('native-country')
+b.columns = ['Over']
+c = a[a['salary'] != ">50K"]
+c = c.value_counts().reset_index().drop('salary', axis = 'columns').set_index('native-country')
+c.columns = ['Under']
+d = b.join(c, how = 'outer')
+d = d.fillna(value = 0)
+d['total'] = d['Over'] + d['Under']
+d['ratio'] = d['Over']/d['total']
+final = d['ratio'].sort_values()
+final.index[-1]
+round(final.values[-1]*100, 1)
+
+# # Identify the most popular occupation for those who earn >50K in India.
+india = df.loc[df['native-country'] == 'India', ['salary', 'occupation']]
+
+india[india['salary'] == ">50K"]['occupation'].value_counts().index[0]
