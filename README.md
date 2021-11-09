@@ -1,5 +1,6 @@
 # DataAnalysisPython
 This repository holds my complete work in pursuit of the Data Analysis with Python freeCodeCamp certificate. 
+
 Completed:
   - Mean-Variance-Standard-Deviation Calculator
   - Demographic Data Analyzer
